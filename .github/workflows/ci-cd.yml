@@ -11,7 +11,7 @@ env:
   IMAGE_NAME: ${{ github.repository }}
 
 jobs:
-  # ── Stage 1: Test ──────────────────────────────────────────────────────────
+  # ── Stage 1: Test ──────────────────────────────────────────────
   test:
     runs-on: ubuntu-latest
     steps:
@@ -27,13 +27,13 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Run tests
-        run: pytest app/test_main.py -v
+        run: PYTHONPATH=. pytest app/test_main.py -v
 
-  # ── Stage 2: Build & Push Docker image ────────────────────────────────────
+  # ── Stage 2: Build & Push Docker image ────────────────────────
   build:
     needs: test
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/master'
     permissions:
       contents: read
       packages: write
@@ -64,5 +64,3 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-
- 
